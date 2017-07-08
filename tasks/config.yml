@@ -40,3 +40,19 @@
     mode: "0644"
     owner: "root"
     group: "root"
+
+- name: Ensure /var/log/journal exists
+  file:
+    path: "/var/log/journal"
+    state: "directory"
+
+- name: Check if /var/log/journal has been set up
+  stat:
+    path: "/var/log/journal"
+  register: journal_path
+
+- name: Set up persistent journal
+  command: systemd-tmpfiles --create --prefix /var/log/journal
+  notify:
+    - Restart journald
+  when: journal_path.stat.gr_name != 'systemd-journal'
