@@ -14,23 +14,28 @@
 #   under the License.
 #
 
-- name: Install base packages
-  package:
-    name: "{{ rdo_base_packages }}"
-    state: "present"
-  retries: "3"
-  delay: "20"
-
-# dmsimard cannot live without htop which is only available in EPEL
-- name: Verify if htop is installed
-  shell: rpm -qa | grep htop
+- name: Verify if EPEL is available
+  shell: rpm -qa | grep epel-release
   failed_when: false
   changed_when: false
-  register: htop
+  register: epel
 
-- name: Install htop
-  vars:
-    package: "htop"
-  include: epel_package.yml
-  static: no
-  when: "'htop' not in htop.stdout"
+- name: Install epel-release
+  package:
+    name: "epel-release"
+    state: "present"
+  when: "'epel' not in epel.stdout"
+  register: installed_epel
+
+- name: "Install {{ package }} from EPEL"
+  package:
+    name: "{{ package }}"
+    state: "present"
+
+# If EPEL was installed, don't remove it but if we just installed it,
+# destroy it with extreme prejudice
+- name: Remove epel-release
+  package:
+    name: "epel-release"
+    state: "absent"
+  when: installed_epel | changed
