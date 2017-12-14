@@ -56,3 +56,13 @@
     line: 'GRUB_TIMEOUT=10'
   notify:
     - Update grub configuration
+
+- name: "Add /usr/local/[bin,sbin] to PATH"
+  lineinfile:
+    dest: "/etc/profile.d/usr_local_path.sh"
+    create: "yes"
+    regexp: "^export"
+    line: 'export PATH="$PATH:/usr/local/bin:/usr/local/sbin"'
+    mode: "0644"
+    owner: "root"
+    group: "root"
