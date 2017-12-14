@@ -34,3 +34,7 @@
 
 - name: Update grub configuration
   shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Used to source new changes such as profile.d, user/group memberships, etc.
+- name: Reset SSH connection
+  meta: reset_connection
