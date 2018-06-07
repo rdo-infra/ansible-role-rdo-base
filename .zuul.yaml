@@ -1,0 +1,11 @@
+- project:
+    name: rdo-infra/ansible-role-rdo-base
+    check:
+      jobs:
+        - tox-ansible-lint
+        - legacy-rdo-infra-playbooks-integration-base
+    gate:
+      queue: ansible-role-rdo-base
+      jobs:
+        - tox-ansible-lint
+        - legacy-rdo-infra-playbooks-integration-base
