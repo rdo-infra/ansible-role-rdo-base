@@ -1,0 +1,9 @@
+- project:
+    name: rdo-infra/ansible-role-rdo-base
+    check:
+      jobs:
+        - legacy-rdo-infra-playbooks-integration-base
+    gate:
+      queue: ansible-role-rdo-base
+      jobs:
+        - legacy-rdo-infra-playbooks-integration-base
